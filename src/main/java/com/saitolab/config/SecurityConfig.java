@@ -1,5 +1,8 @@
 package com.saitolab.config;
 
+import com.saitolab.common.security.LoginFailureHandler;
+import com.saitolab.common.security.LoginSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -19,6 +22,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private LoginSuccessHandler loginSuccessHandler;
+
+    @Autowired
+    private LoginFailureHandler loginFailureHandler;
+
     private static final String URL_WHITELIST[] ={
             "/login",
             "/logout",
@@ -32,15 +41,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // 开启跨域 和 csrf攻击 关闭
         http
-                .cors()
-                .and()
-                .csrf()
-                .disable()
+            .cors()
+            .and()
+            .csrf()
+            .disable()
 
                 // 登录配置
-                .formLogin()
-//                .successHandler()
-//                .failureHandler()
+        .formLogin()
+            .successHandler(loginSuccessHandler)
+            .failureHandler(loginFailureHandler)
 //        .and()
 //                .logout()
 //                .logoutSuccessHandler()
