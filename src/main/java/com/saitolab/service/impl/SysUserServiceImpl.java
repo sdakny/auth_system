@@ -1,10 +1,15 @@
 package com.saitolab.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.saitolab.entity.SysUser;
 import com.saitolab.service.SysUserService;
 import com.saitolab.mapper.SysUserMapper;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
 * @author Willi
@@ -14,6 +19,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
     implements SysUserService{
+
+    @Override
+    public SysUser getByUserName(String username) {
+        return getOne(new QueryWrapper<SysUser>().eq("username",username));
+    }
+
 
 }
 
