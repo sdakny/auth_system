@@ -2,9 +2,10 @@ package com.saitolab.common.security;
 
 import cn.hutool.json.JSONUtil;
 import com.saitolab.entity.R;
-import com.saitolab.util.JwtUtils;
+import com.saitolab.service.SysUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
@@ -13,21 +14,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 自定义退出处理
+ */
 @Component
-public class LoginSuccessHandler implements AuthenticationSuccessHandler {
+public class JwtLogoutSuccessHandler implements LogoutSuccessHandler {
 
+    @Autowired
+    private SysUserService sysUserService;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+    public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         httpServletResponse.setContentType("application/json;charset=UTF-8");
         ServletOutputStream outputStream = httpServletResponse.getOutputStream();
 
-        String username="user";
-        String token = JwtUtils.genJwtToken(username);
+        outputStream.write(JSONUtil.toJsonStr(R.ok("退出成功")).getBytes("UTF-8"));
 
-        outputStream.write(JSONUtil.toJsonStr(R.ok("login success").put("authorization",token)).getBytes());
         outputStream.flush();
         outputStream.close();
-
     }
 }

@@ -1,4 +1,4 @@
-package com.saitolab.utils;
+package com.saitolab.util;
 
 import com.saitolab.common.constant.JwtConstant;
 import com.saitolab.entity.CheckResult;

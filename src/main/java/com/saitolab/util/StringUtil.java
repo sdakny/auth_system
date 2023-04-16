@@ -1,4 +1,4 @@
-package com.saitolab.utils;
+package com.saitolab.util;
 
 import java.util.ArrayList;
 import java.util.List;
