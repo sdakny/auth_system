@@ -33,7 +33,15 @@ public class MyUserDetailServiceImpl implements UserDetailsService {
         return new User(sysUser.getUsername(),sysUser.getPassword(),getUserAuthority(sysUser.getId()));
     }
 
-    public List<GrantedAuthority> getUserAuthority(Long userId){
-        return new ArrayList<>();
+    /**
+     * 获取用户权限信息 包括角色 菜单权限信息
+     * @param userId
+     * @return
+     */
+    public List<GrantedAuthority> getUserAuthority(Long userId) {
+        // 格式ROLE_admin,ROLE_common,system:user:resetPwd,system:role:delete,system:user:list,system:menu:query,system:menu:list,system:menu:add,system:user:delete,system:role:list,system:role:menu,system:user:edit,system:user:query,system:role:edit,system:user:add,system:user:role,system:menu:delete,system:role:add,system:role:query,system:menu:edit
+        String authority=sysUserService.getUserAuthorityInfo(userId);
+        System.out.println("authority="+authority);
+        return AuthorityUtils.commaSeparatedStringToAuthorityList(authority);
     }
 }
